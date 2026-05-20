@@ -28,6 +28,10 @@ apis:
     description: >-
       The Change Healthcare API provides access to platform services and data for enterprise integration and automation.
 common:
+  - type: GitHubOrganization
+    url: https://github.com/changehealthcare
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/change-healthcare
   - type: Website
     url: https://www.changehealthcare.com
 maintainers:
