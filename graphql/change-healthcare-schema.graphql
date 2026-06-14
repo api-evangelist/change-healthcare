@@ -1,0 +1,849 @@
+"""
+Change Healthcare GraphQL Schema
+Conceptual schema for the Change Healthcare (Optum/UnitedHealth Group)
+healthcare transaction and data platform.
+"""
+
+scalar Date
+scalar DateTime
+scalar Decimal
+scalar JSON
+
+# ─────────────────────────────────────────────
+# Enumerations
+# ─────────────────────────────────────────────
+
+enum ClaimType {
+  PROFESSIONAL
+  INSTITUTIONAL
+  DENTAL
+  PHARMACY
+}
+
+enum ClaimFrequency {
+  ORIGINAL
+  REPLACEMENT
+  VOID
+  LATE_CHARGE
+}
+
+enum ClaimStatus {
+  RECEIVED
+  PENDING
+  IN_PROCESS
+  FINALIZED
+  DENIED
+  ADJUSTED
+  REVERSED
+  FORWARDED
+}
+
+enum ServiceType {
+  MEDICAL_CARE
+  SURGICAL
+  CONSULTATION
+  DIAGNOSTIC_LAB
+  RADIOLOGY
+  ANESTHESIA
+  DURABLE_MEDICAL_EQUIPMENT
+  MENTAL_HEALTH
+  SUBSTANCE_ABUSE
+  CHIROPRACTIC
+  PHYSICAL_THERAPY
+  OCCUPATIONAL_THERAPY
+  SPEECH_THERAPY
+  SKILLED_NURSING
+  HOME_HEALTH
+  HOSPICE
+  INPATIENT_HOSPITAL
+  OUTPATIENT_HOSPITAL
+  EMERGENCY
+  AMBULANCE
+  PHARMACY
+  VISION
+  DENTAL
+  PREVENTIVE
+  OTHER
+}
+
+enum PlaceOfService {
+  OFFICE
+  HOME
+  INPATIENT_HOSPITAL
+  OUTPATIENT_HOSPITAL
+  EMERGENCY_ROOM
+  AMBULATORY_SURGERY_CENTER
+  SKILLED_NURSING_FACILITY
+  URGENT_CARE
+  TELEHEALTH
+  OTHER
+}
+
+enum NetworkStatus {
+  IN_NETWORK
+  OUT_OF_NETWORK
+  UNKNOWN
+}
+
+enum AuthorizationStatus {
+  APPROVED
+  DENIED
+  PENDING
+  CANCELLED
+  MODIFIED
+  EXPIRED
+}
+
+enum EligibilityStatus {
+  ACTIVE
+  INACTIVE
+  UNKNOWN
+}
+
+enum GenderCode {
+  MALE
+  FEMALE
+  UNKNOWN
+  NON_BINARY
+}
+
+enum TransactionSetType {
+  EDI_270
+  EDI_271
+  EDI_276
+  EDI_277
+  EDI_278
+  EDI_835
+  EDI_837P
+  EDI_837I
+  EDI_837D
+}
+
+enum ValidationSeverity {
+  ERROR
+  WARNING
+  INFO
+}
+
+# ─────────────────────────────────────────────
+# Core Party Types
+# ─────────────────────────────────────────────
+
+type NPI {
+  number: String!
+  type: String
+  enumerationDate: Date
+  lastUpdated: Date
+  status: String
+}
+
+type TaxId {
+  number: String!
+  type: String
+  stateOfIssue: String
+}
+
+type Address {
+  line1: String!
+  line2: String
+  city: String!
+  state: String!
+  postalCode: String!
+  countryCode: String
+}
+
+type Provider {
+  id: ID!
+  npi: NPI!
+  taxId: TaxId
+  organizationName: String
+  firstName: String
+  lastName: String
+  specialty: String
+  taxonomyCode: String
+  address: Address
+  phone: String
+  fax: String
+  networkStatus: NetworkStatus
+  acceptsMedicaid: Boolean
+  acceptsMedicare: Boolean
+}
+
+type Payer {
+  id: ID!
+  payerId: String!
+  name: String!
+  address: Address
+  phone: String
+  electronicPayerId: String
+  clearinghouseCode: String
+  supportedTransactions: [TransactionSetType!]
+}
+
+type Patient {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  middleName: String
+  dateOfBirth: Date!
+  gender: GenderCode!
+  address: Address
+  phone: String
+  memberId: String
+  accountNumber: String
+}
+
+type Subscriber {
+  id: ID!
+  memberId: String!
+  groupNumber: String
+  firstName: String!
+  lastName: String!
+  dateOfBirth: Date!
+  gender: GenderCode!
+  address: Address
+  relationship: String
+  payer: Payer
+}
+
+type Member {
+  id: ID!
+  memberId: String!
+  groupId: String
+  planId: String
+  subscriber: Subscriber!
+  patient: Patient!
+  eligibilityStatus: EligibilityStatus!
+  coverageStartDate: Date
+  coverageEndDate: Date
+  payer: Payer!
+}
+
+type PolicyHolder {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  dateOfBirth: Date!
+  memberId: String!
+  groupNumber: String
+  employer: String
+  address: Address
+}
+
+# ─────────────────────────────────────────────
+# Coverage & Benefits
+# ─────────────────────────────────────────────
+
+type Deductible {
+  individual: Decimal
+  family: Decimal
+  individualMet: Decimal
+  familyMet: Decimal
+  inNetworkIndividual: Decimal
+  inNetworkFamily: Decimal
+  outOfNetworkIndividual: Decimal
+  outOfNetworkFamily: Decimal
+  planYear: String
+}
+
+type Copay {
+  serviceType: ServiceType!
+  amount: Decimal!
+  networkStatus: NetworkStatus
+  notes: String
+}
+
+type Coinsurance {
+  serviceType: ServiceType!
+  inNetworkPercentage: Decimal
+  outOfNetworkPercentage: Decimal
+  notes: String
+}
+
+type EligibilityBenefit {
+  id: ID!
+  serviceType: ServiceType!
+  coverageLevel: String
+  inNetworkPercentage: Decimal
+  outOfNetworkPercentage: Decimal
+  copay: Copay
+  deductible: Deductible
+  coinsurance: Coinsurance
+  authorizationRequired: Boolean
+  referralRequired: Boolean
+  limitations: String
+  notes: String
+}
+
+type Coverage {
+  id: ID!
+  member: Member!
+  payer: Payer!
+  planName: String
+  planType: String
+  groupNumber: String
+  groupName: String
+  networkStatus: NetworkStatus
+  effectiveDate: Date!
+  terminationDate: Date
+  benefits: [EligibilityBenefit!]
+  deductible: Deductible
+}
+
+type Eligibility {
+  id: ID!
+  transactionId: String!
+  requestDate: DateTime!
+  responseDate: DateTime
+  status: EligibilityStatus!
+  member: Member!
+  payer: Payer!
+  requestingProvider: Provider
+  coverages: [Coverage!]
+  benefits: [EligibilityBenefit!]
+  planBeginDate: Date
+  planEndDate: Date
+  planNumber: String
+  planName: String
+  rawResponse: JSON
+}
+
+# ─────────────────────────────────────────────
+# Claims
+# ─────────────────────────────────────────────
+
+type Diagnosis {
+  code: String!
+  codeSystem: String!
+  description: String
+  qualifier: String
+  sequenceNumber: Int
+  isPrincipal: Boolean
+  isPresentOnAdmission: Boolean
+}
+
+type Procedure {
+  code: String!
+  codeSystem: String!
+  description: String
+  qualifier: String
+  sequenceNumber: Int
+  modifiers: [String!]
+  datePerformed: Date
+}
+
+type ClaimLine {
+  lineNumber: Int!
+  serviceDate: Date!
+  serviceEndDate: Date
+  placeOfService: PlaceOfService
+  procedureCode: String!
+  procedureDescription: String
+  modifiers: [String!]
+  diagnosisPointers: [String!]
+  quantity: Decimal!
+  unitOfMeasure: String
+  chargeAmount: Decimal!
+  allowedAmount: Decimal
+  paidAmount: Decimal
+  adjustmentAmount: Decimal
+  ndc: String
+  serviceType: ServiceType
+  renderingProvider: Provider
+  status: ClaimStatus
+  denialCode: String
+  denialReason: String
+}
+
+type Claim {
+  id: ID!
+  claimNumber: String!
+  claimType: ClaimType!
+  claimFrequency: ClaimFrequency!
+  status: ClaimStatus!
+  submissionDate: DateTime!
+  serviceStartDate: Date!
+  serviceEndDate: Date!
+  patient: Patient!
+  subscriber: Subscriber!
+  renderingProvider: Provider!
+  billingProvider: Provider!
+  referringProvider: Provider
+  payer: Payer!
+  diagnoses: [Diagnosis!]!
+  procedures: [Procedure!]
+  claimLines: [ClaimLine!]!
+  totalChargeAmount: Decimal!
+  totalAllowedAmount: Decimal
+  totalPaidAmount: Decimal
+  totalAdjustmentAmount: Decimal
+  patientResponsibility: Decimal
+  authorizationNumber: String
+  referralNumber: String
+  admissionDate: Date
+  dischargeDate: Date
+  admissionType: String
+  admissionSource: String
+  dischargeStatus: String
+  drg: String
+}
+
+type ClaimStatusResponse {
+  id: ID!
+  transactionId: String!
+  claimNumber: String!
+  claim: Claim
+  status: ClaimStatus!
+  statusDate: DateTime!
+  checkDate: Date
+  checkNumber: String
+  paidAmount: Decimal
+  adjustmentReasonCodes: [String!]
+  statusDetails: String
+  payer: Payer
+}
+
+# ─────────────────────────────────────────────
+# Remittance & Payment
+# ─────────────────────────────────────────────
+
+type Adjustment {
+  id: ID!
+  reasonCode: String!
+  reasonDescription: String
+  amount: Decimal!
+  quantity: Decimal
+  groupCode: String
+}
+
+type Denial {
+  id: ID!
+  claimLine: ClaimLine
+  reasonCode: String!
+  reasonDescription: String!
+  amount: Decimal
+  followUpAction: String
+  appealDeadline: Date
+}
+
+type EOB {
+  id: ID!
+  eobNumber: String!
+  issueDate: Date!
+  member: Member!
+  payer: Payer!
+  claims: [Claim!]!
+  totalBilledAmount: Decimal!
+  totalAllowedAmount: Decimal!
+  totalPaidAmount: Decimal!
+  totalPatientResponsibility: Decimal!
+  adjustments: [Adjustment!]
+  denials: [Denial!]
+}
+
+type ERA {
+  id: ID!
+  transactionId: String!
+  checkDate: Date!
+  checkNumber: String
+  paymentAmount: Decimal!
+  paymentMethod: String
+  payer: Payer!
+  payee: Provider!
+  claims: [Claim!]!
+  adjustments: [Adjustment!]
+  denials: [Denial!]
+  rawX12: String
+}
+
+type Remittance {
+  id: ID!
+  remittanceDate: Date!
+  totalPaymentAmount: Decimal!
+  payer: Payer!
+  provider: Provider!
+  eras: [ERA!]!
+  eobs: [EOB!]
+}
+
+type PaymentAdvice {
+  id: ID!
+  paymentDate: Date!
+  paymentAmount: Decimal!
+  paymentMethod: String!
+  checkNumber: String
+  eftTraceNumber: String
+  payer: Payer!
+  provider: Provider!
+  remittance: Remittance
+  claimCount: Int!
+}
+
+# ─────────────────────────────────────────────
+# Prior Authorization & Referrals
+# ─────────────────────────────────────────────
+
+type PriorAuth {
+  id: ID!
+  authorizationNumber: String!
+  status: AuthorizationStatus!
+  requestDate: DateTime!
+  decisionDate: DateTime
+  effectiveDate: Date
+  expirationDate: Date
+  patient: Patient!
+  requestingProvider: Provider!
+  servicingProvider: Provider
+  payer: Payer!
+  serviceType: ServiceType
+  diagnosisCodes: [String!]
+  procedureCodes: [String!]
+  approvedUnits: Decimal
+  requestedUnits: Decimal
+  denialReason: String
+  notes: String
+}
+
+type ReferralRequest {
+  id: ID!
+  referralNumber: String!
+  status: AuthorizationStatus!
+  requestDate: DateTime!
+  decisionDate: DateTime
+  referringProvider: Provider!
+  referredToProvider: Provider
+  patient: Patient!
+  payer: Payer!
+  serviceType: ServiceType!
+  diagnosisCodes: [String!]
+  approvedVisits: Int
+  requestedVisits: Int
+  effectiveDate: Date
+  expirationDate: Date
+  notes: String
+}
+
+type Appeal {
+  id: ID!
+  appealNumber: String!
+  submissionDate: DateTime!
+  decisionDate: DateTime
+  originalClaim: Claim!
+  denial: Denial!
+  status: String!
+  appealType: String
+  requestedAmount: Decimal
+  approvedAmount: Decimal
+  decisionReason: String
+  submittedBy: String
+}
+
+type Attachment {
+  id: ID!
+  attachmentId: String!
+  fileName: String!
+  contentType: String!
+  size: Int!
+  uploadDate: DateTime!
+  claim: Claim
+  authorization: PriorAuth
+  description: String
+  documentType: String
+  url: String
+}
+
+# ─────────────────────────────────────────────
+# EDI / X12 / Clearinghouse
+# ─────────────────────────────────────────────
+
+type InterchangeEnvelope {
+  id: ID!
+  controlNumber: String!
+  senderId: String!
+  receiverId: String!
+  interchangeDate: Date!
+  interchangeTime: String!
+  transactionSets: [TransactionSet!]!
+  functionalGroups: [FunctionalGroup!]!
+}
+
+type FunctionalGroup {
+  id: ID!
+  groupControlNumber: String!
+  functionalIdentifierCode: String!
+  applicationSenderCode: String!
+  applicationReceiverCode: String!
+  date: Date!
+  transactionSets: [TransactionSet!]!
+}
+
+type TransactionSet {
+  id: ID!
+  controlNumber: String!
+  type: TransactionSetType!
+  segmentCount: Int!
+  rawSegments: String
+  parsedContent: JSON
+}
+
+type X12Batch {
+  id: ID!
+  batchId: String!
+  submissionDate: DateTime!
+  transactionSetType: TransactionSetType!
+  interchangeEnvelopes: [InterchangeEnvelope!]!
+  claimCount: Int
+  totalChargeAmount: Decimal
+  status: String!
+}
+
+type EDIFile {
+  id: ID!
+  fileName: String!
+  uploadDate: DateTime!
+  fileSize: Int!
+  transactionSetType: TransactionSetType!
+  x12Batch: X12Batch
+  status: String!
+  processingErrors: [String!]
+}
+
+type ValidationReport {
+  id: ID!
+  validationDate: DateTime!
+  entityId: String!
+  entityType: String!
+  isValid: Boolean!
+  errors: [ValidationIssue!]
+  warnings: [ValidationIssue!]
+}
+
+type ValidationIssue {
+  code: String!
+  severity: ValidationSeverity!
+  message: String!
+  fieldPath: String
+  value: String
+}
+
+type SubmissionResult {
+  id: ID!
+  submissionDate: DateTime!
+  transactionId: String!
+  claimIds: [String!]!
+  status: String!
+  acceptedCount: Int!
+  rejectedCount: Int!
+  pendingCount: Int!
+  validationReport: ValidationReport
+  acknowledgmentControlNumber: String
+  payer: Payer
+}
+
+type RejectionReason {
+  code: String!
+  description: String!
+  category: String
+  resolution: String
+  relatedSegment: String
+}
+
+type ClearinghouseCode {
+  code: String!
+  codeSet: String!
+  description: String!
+  notes: String
+}
+
+# ─────────────────────────────────────────────
+# Administrative
+# ─────────────────────────────────────────────
+
+type PayerList {
+  id: ID!
+  lastUpdated: DateTime!
+  totalCount: Int!
+  payers: [Payer!]!
+}
+
+type FeeSchedule {
+  id: ID!
+  payerId: String!
+  effectiveDate: Date!
+  terminationDate: Date
+  procedureCode: String!
+  modifier: String
+  placeOfService: PlaceOfService
+  allowedAmount: Decimal!
+  stateCode: String
+  notes: String
+}
+
+# ─────────────────────────────────────────────
+# Root Operations
+# ─────────────────────────────────────────────
+
+type Query {
+  # Eligibility
+  checkEligibility(memberId: String!, payerId: String!, serviceDate: Date, serviceTypes: [ServiceType!]): Eligibility
+  getEligibility(id: ID!): Eligibility
+  getMember(id: ID!): Member
+  getCoverage(memberId: ID!): [Coverage!]
+
+  # Claims
+  getClaim(id: ID!): Claim
+  getClaimByNumber(claimNumber: String!): Claim
+  searchClaims(patientId: ID, providerId: ID, payerId: ID, status: ClaimStatus, startDate: Date, endDate: Date, claimType: ClaimType, limit: Int, offset: Int): [Claim!]
+  getClaimStatus(claimNumber: String!, payerId: String!): ClaimStatusResponse
+
+  # Remittance
+  getERA(id: ID!): ERA
+  getEOB(id: ID!): EOB
+  getRemittance(id: ID!): Remittance
+  getPaymentAdvice(id: ID!): PaymentAdvice
+  searchRemittances(providerId: ID, payerId: ID, startDate: Date, endDate: Date, limit: Int, offset: Int): [Remittance!]
+
+  # Providers & Payers
+  getProvider(id: ID!): Provider
+  searchProviders(npi: String, lastName: String, specialty: String, state: String, networkStatus: NetworkStatus, limit: Int, offset: Int): [Provider!]
+  getPayer(id: ID!): Payer
+  getPayerList: PayerList
+
+  # Authorizations
+  getPriorAuth(id: ID!): PriorAuth
+  getPriorAuthByNumber(authorizationNumber: String!): PriorAuth
+  getReferralRequest(id: ID!): ReferralRequest
+  searchAuthorizations(patientId: ID, providerId: ID, payerId: ID, status: AuthorizationStatus, startDate: Date, endDate: Date, limit: Int, offset: Int): [PriorAuth!]
+
+  # EDI
+  getEDIFile(id: ID!): EDIFile
+  getX12Batch(id: ID!): X12Batch
+  getSubmissionResult(id: ID!): SubmissionResult
+  getValidationReport(id: ID!): ValidationReport
+
+  # Administrative
+  getFeeSchedule(payerId: String!, procedureCode: String!, serviceDate: Date, placeOfService: PlaceOfService): FeeSchedule
+  getClearinghouseCode(code: String!, codeSet: String!): ClearinghouseCode
+  getRejectionReason(code: String!): RejectionReason
+}
+
+type Mutation {
+  # Claims
+  submitClaim(claim: ClaimInput!): SubmissionResult!
+  voidClaim(claimId: ID!, reason: String!): Claim!
+  correctClaim(claimId: ID!, corrections: ClaimInput!): SubmissionResult!
+
+  # Eligibility
+  requestEligibility(request: EligibilityRequestInput!): Eligibility!
+
+  # Authorizations
+  submitPriorAuth(request: PriorAuthInput!): PriorAuth!
+  cancelPriorAuth(id: ID!, reason: String!): PriorAuth!
+  submitReferral(request: ReferralInput!): ReferralRequest!
+
+  # Appeals
+  submitAppeal(appeal: AppealInput!): Appeal!
+
+  # Attachments
+  uploadAttachment(attachment: AttachmentInput!): Attachment!
+
+  # EDI
+  submitEDIFile(fileContent: String!, transactionSetType: TransactionSetType!): SubmissionResult!
+  validateEDIFile(fileContent: String!, transactionSetType: TransactionSetType!): ValidationReport!
+}
+
+# ─────────────────────────────────────────────
+# Input Types
+# ─────────────────────────────────────────────
+
+input AddressInput {
+  line1: String!
+  line2: String
+  city: String!
+  state: String!
+  postalCode: String!
+  countryCode: String
+}
+
+input ClaimInput {
+  claimType: ClaimType!
+  claimFrequency: ClaimFrequency!
+  patientId: String!
+  subscriberId: String!
+  renderingProviderNPI: String!
+  billingProviderNPI: String!
+  referringProviderNPI: String
+  payerId: String!
+  serviceStartDate: Date!
+  serviceEndDate: Date!
+  diagnosisCodes: [String!]!
+  claimLines: [ClaimLineInput!]!
+  totalChargeAmount: Decimal!
+  authorizationNumber: String
+  referralNumber: String
+}
+
+input ClaimLineInput {
+  lineNumber: Int!
+  serviceDate: Date!
+  serviceEndDate: Date
+  placeOfService: PlaceOfService!
+  procedureCode: String!
+  modifiers: [String!]
+  diagnosisPointers: [String!]
+  quantity: Decimal!
+  chargeAmount: Decimal!
+  ndc: String
+}
+
+input EligibilityRequestInput {
+  memberId: String!
+  payerId: String!
+  providerNPI: String!
+  serviceDate: Date
+  serviceTypes: [ServiceType!]
+}
+
+input PriorAuthInput {
+  patientId: String!
+  requestingProviderNPI: String!
+  servicingProviderNPI: String
+  payerId: String!
+  serviceType: ServiceType!
+  diagnosisCodes: [String!]!
+  procedureCodes: [String!]!
+  requestedUnits: Decimal
+  serviceStartDate: Date!
+  serviceEndDate: Date
+  clinicalNotes: String
+}
+
+input ReferralInput {
+  patientId: String!
+  referringProviderNPI: String!
+  referredToProviderNPI: String
+  payerId: String!
+  serviceType: ServiceType!
+  diagnosisCodes: [String!]!
+  requestedVisits: Int
+  serviceStartDate: Date!
+}
+
+input AppealInput {
+  claimId: ID!
+  denialId: ID!
+  appealType: String!
+  requestedAmount: Decimal
+  supportingDocumentation: String
+  appealReason: String!
+}
+
+input AttachmentInput {
+  claimId: ID
+  authorizationId: ID
+  fileName: String!
+  contentType: String!
+  documentType: String!
+  description: String
+  fileContent: String!
+}
