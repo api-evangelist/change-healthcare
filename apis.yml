@@ -4,53 +4,148 @@ name: Change Healthcare
 type: Index
 accessModel:
   pricing: unknown
-  onboarding: unknown
+  onboarding: request
   trial: false
   try_now: false
   public: false
-  label: Unknown
-  confidence: low
+  label: Contact Sales
+  confidence: high
   source:
   - plans
-  generated: '2026-07-22'
-  method: derived
+  - https://developer.optum.com/eligibilityandclaims/docs/create-a-sandbox-account
+  generated: '2026-08-15'
+  method: searched
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/change-healthcare.png
 tags:
 - Healthcare
 - Technology
 - Analytics
-description: Change Healthcare is a major US corporation and Fortune 1000 company.
-  The Change Healthcare API provides programmatic access to its platform services,
-  data, and integrations for enterprise customers and partners.
+- EDI
+- Claims
+- Eligibility
+- Clearinghouse
+- Revenue Cycle Management
+- Prior Authorization
+description: >-
+  Change Healthcare was one of the largest healthcare technology and clearinghouse companies in the
+  United States, moving eligibility, claim, remittance and prior-authorization transactions between
+  providers and payers over X12 EDI. UnitedHealth Group acquired it in October 2022 and folded it
+  into Optum, and the brand has since been retired: www.changehealthcare.com redirects to
+  business.optum.com, developers.changehealthcare.com redirects path-for-path to
+  developer.optum.com, and the apis.changehealthcare.com API gateway is decommissioned and
+  documented by Optum as "an old domain and no longer supported". The Change Healthcare Medical
+  Network APIs — Eligibility v3, Professional Claims v3, Institutional Claims v1, Claim Status v2,
+  Claims Responses and Reports v2, Attachments, PayerList v1 and Prior Authorization v1 — are still
+  operated and documented, but on Optum infrastructure and under Optum hosts.
 created: '2026-04-19'
-modified: '2026-04-19'
+modified: '2026-08-15'
 specificationVersion: '0.19'
 apis:
 - aid: change-healthcare:change-healthcare-api
-  name: Change Healthcare API
+  name: Change Healthcare Medical Network API
   tags:
   - Healthcare
-  - Technology
-  - Analytics
+  - EDI
+  - Eligibility
+  - Claims
+  - Prior Authorization
   image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  baseURL: https://api.changehealthcare.com
-  humanURL: https://developer.changehealthcare.com
+  baseURL: https://apigw.optum.com/medicalnetwork/
+  humanURL: https://developers.changehealthcare.com/
+  description: >-
+    JSON-over-REST front end to the HIPAA X12 EDI transaction set — 270/271 eligibility, 276/277
+    claim status, 837P/837I claim submission and validation, 835/277 claims responses and reports,
+    278 prior authorization and referrals, claim attachments, and the payer list. OAuth 2.0 client
+    credentials against apip/auth/v2/token, one-hour bearer tokens, versioning carried in the URL
+    path.
   properties:
-  - url: https://developer.changehealthcare.com/docs
+  - url: https://developer.optum.com/eligibilityandclaims/docs
     type: Documentation
-  - url: graphql/change-healthcare-graphql.md
-    type: GraphQL
-  description: The Change Healthcare API provides access to platform services and
-    data for enterprise integration and automation.
+    name: >-
+      Successor documentation. developers.changehealthcare.com CNAMEs to developer.optum.com and
+      301s path-for-path (verified: /eligibilityandclaims/docs/api-urls on the changehealthcare.com
+      host lands on the identical Optum page), so this is the Change Healthcare Medical Network
+      reference under its acquirer.
+  - url: https://developer.optum.com/eligibilityandclaims/reference/api-overview
+    type: APIReference
+  - url: https://developer.optum.com/eligibilityandclaims/docs/get-started-with-optum-api
+    type: GettingStarted
+  - url: https://developer.optum.com/eligibilityandclaims/docs/create-a-sandbox-account
+    type: SignUp
+    name: Request sandbox access — there is no self-serve signup.
+  - url: https://developer.optum.com/eligibilityandclaims/docs/eligibility-release-notes
+    type: ChangeLog
+    name: Dated release notes for Medical Network Eligibility.
+  - url: https://www.postman.com/changehealthcare-cdp-dev/workspace/change-healthcare-medical-network-apis/overview
+    type: Postman
+    name: >-
+      Public Postman workspace published by the changehealthcare-cdp-dev team, carrying the Medical
+      Network Eligibility v3, Professional Claims v3, Institutional Claims v1, Claim Status v2 and
+      Claims Responses and Reports collections. Note postman.com soft-200s every URL, so presence
+      was established from indexed collection pages under the workspace, not from the status code.
+  - url: lifecycle/change-healthcare-lifecycle.yml
+    type: Lifecycle
+  - url: conformance/change-healthcare-conformance.yml
+    type: Conformance
 common:
-- type: DomainSecurity
-  url: security/change-healthcare-domain-security.yml
-- type: GitHubOrganization
-  url: https://github.com/changehealthcare
-- type: LinkedIn
-  url: https://www.linkedin.com/company/change-healthcare
 - type: Website
   url: https://www.changehealthcare.com
+- type: DeveloperPortal
+  url: https://developer.optum.com/
+- type: StatusPage
+  url: https://status.changehealthcare.com
+  name: >-
+    Live on a changehealthcare.com host; CNAMEs into Atlassian Statuspage and serves a
+    machine-readable /api/v2/summary.json. Branded "Optum Solutions".
+- type: TermsOfService
+  url: https://www.optum.com/en/terms-of-use.html
+- type: PrivacyPolicy
+  url: https://www.optum.com/en/privacy-policy.html
+- type: LLMsTxt
+  url: llms/change-healthcare-llms.txt
+  name: >-
+    Served verbatim at https://www.changehealthcare.com/llms.txt (HTTP 200, text/plain). It is an
+    AI-usage POLICY, not a docs index — every usage class is marked disallowed.
+- type: Lifecycle
+  url: lifecycle/change-healthcare-lifecycle.yml
+- type: Conformance
+  url: conformance/change-healthcare-conformance.yml
+- type: Packages
+  url: packages/change-healthcare-packages.yml
+  name: >-
+    Zero first-party SDKs. The three RubyGems recorded are customer-written wrappers, so no SDKs
+    pointer is emitted.
+- type: DomainSecurity
+  url: security/change-healthcare-domain-security.yml
+- type: LinkedIn
+  url: https://www.linkedin.com/company/change-healthcare
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
+x-enrichment:
+  date: '2026-08-15'
+  status: minimal
+  artifacts_added: 5
+  pass: local-v1
+x-coverage:
+  state: none
+  reason: defunct
+  detail: >-
+    Change Healthcare no longer operates a developer surface of its own — UnitedHealth Group
+    absorbed it into Optum, www.changehealthcare.com 301s to business.optum.com,
+    developers.changehealthcare.com 301s to developer.optum.com, and Optum's own documentation
+    tells integrators "Do not use the https://apis.changehealthcare.com as it is an old domain and
+    no longer supported"; the surviving Medical Network API contracts are served from
+    apigw.optum.com and are catalogued under all/optum rather than duplicated here.
+  evidence:
+  - url: https://www.changehealthcare.com/
+    status: 301
+  - url: https://developers.changehealthcare.com/
+    status: 301
+  - url: https://apis.changehealthcare.com/openapi.json
+    status: 400
+  - url: https://api.changehealthcare.com/
+    status: 0
+  - url: https://developer.optum.com/eligibilityandclaims/docs/api-urls
+    status: 200
+  checked: '2026-08-15'
