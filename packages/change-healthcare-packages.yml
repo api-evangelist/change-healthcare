@@ -1,0 +1,92 @@
+generated: '2026-08-14'
+method: searched
+source: >-
+  registry queries against registry.npmjs.org, pypi.org, rubygems.org, crates.io, api.nuget.org,
+  search.maven.org and pkg.go.dev, plus a GitHub org/user check
+provider: Change Healthcare
+providerId: change-healthcare
+official_package_count: 0
+description: >-
+  Change Healthcare ships no first-party client SDK under its own name on any public registry.
+  The three RubyGems below are community-maintained wrappers written by customers of the Change
+  Healthcare Medical Network APIs, not by the company. NO `SDKs` pointer is emitted in apis.yml,
+  because sdk_count must only fire on first-party libraries.
+notes: >-
+  Optum publishes a "Generate a Client SDK" guide on the successor developer portal rather than
+  shipping maintained SDKs, so there is no first-party package to inherit either. Every one of
+  these community gems predates or barely postdates the retirement of the
+  apis.changehealthcare.com gateway they were written against — the newest release is April 2024
+  and the gateway they call is now decommissioned, so all three are functionally abandoned
+  against the current Optum endpoints.
+registries_checked:
+- registry: npm
+  query: changehealthcare, change-healthcare, '@changehealthcare/*'
+  result: no first-party package (404)
+- registry: pypi
+  query: changehealthcare, change-healthcare
+  result: no package (404)
+- registry: rubygems
+  result: 3 community packages, listed below
+- registry: crates.io
+  result: none
+- registry: nuget
+  result: none
+- registry: maven-central
+  result: none
+- registry: pkg.go.dev
+  result: none
+- registry: github
+  query: github.com/changehealthcare
+  result: >-
+    NOT an organization. github.com/changehealthcare is an empty personal USER account created
+    2020-01-03 with 0 public repos, no name, no company and no bio. The GET
+    /orgs/changehealthcare API returns 404. The apis.yml `GitHubOrganization` pointer that
+    asserted this was a company org has been removed in this pass.
+packages:
+- language: ruby
+  registry: rubygems
+  name: change_healthcare-professional_claims
+  url: https://rubygems.org/gems/change_healthcare-professional_claims
+  install: gem install change_healthcare-professional_claims
+  official: false
+  version: 0.6.1
+  published: '2024-04-15'
+  release_count: 7
+  downloads: 59454
+  author: Anthony Super
+  source: https://github.com/SonderMindOrg/change_healthcare-professional_claims
+  note: >-
+    Community wrapper around a generated Swagger client for the Change Healthcare Professional
+    Claims API, maintained by SonderMind (a customer), not by Change Healthcare.
+- language: ruby
+  registry: rubygems
+  name: change_healthcare-eligibility
+  url: https://rubygems.org/gems/change_healthcare-eligibility
+  install: gem install change_healthcare-eligibility
+  official: false
+  version: 0.3.0
+  published: '2020-12-15'
+  release_count: 3
+  downloads: 52607
+  author: Anthony Super
+  source: https://github.com/SonderMindOrg/change_healthcare-eligibility
+  note: Community eligibility (X12 270/271) wrapper maintained by SonderMind.
+- language: ruby
+  registry: rubygems
+  name: change_healthcare
+  url: https://rubygems.org/gems/change_healthcare
+  install: gem install change_healthcare
+  official: false
+  version: '1.2'
+  published: '2022-12-19'
+  release_count: 5
+  downloads: 4831
+  author: Saul Moncada
+  source: null
+  homepage: https://www.mdlive.com
+  note: >-
+    Community API client. The gem's declared homepage is mdlive.com, another Change Healthcare
+    customer — clear evidence it is third-party.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

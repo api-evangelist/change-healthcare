@@ -3,38 +3,49 @@ specificationVersion: '0.1'
 schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
 provider: Change Healthcare
 providerId: change-healthcare
+generated: '2026-08-15'
+method: searched
+source: >-
+  live probes of every changehealthcare.com property plus the successor Optum developer portal
 created: '2026-05-04'
-modified: '2026-05-05'
-reconciled: false
+modified: '2026-08-15'
+reconciled: true
 tags:
-  - Rate Limiting
-  - Healthcare
-  - EDI
-description: Change Healthcare does not publish numeric rate limits on its developer portal. API access
-  is provisioned per contracted customer; per-API throttling is governed by the contract and onboarding
-  configuration.
-notes: No public per-second/per-minute rate limit numbers documented; contract-governed.
-sources:
-  - https://www.changehealthcare.com
-responseCodes:
-  throttled: 429
-  unauthorized: 401
-limits:
-  - name: Medical Network APIs
-    scope: api_key
-    metric: varies
-    limit: see customer contract
-  - name: Clinical / FHIR APIs
-    scope: api_key
-    metric: varies
-    limit: see customer contract
-policies:
-  - name: Backoff Strategy
-    description: Use exponential backoff with jitter on 429/503 and honor Retry-After when present.
-  - name: Sandbox vs production
-    description: Sandbox traffic is throttled lower than production; do not load-test production credentials.
-  - name: HIPAA / PHI handling
-    description: All access to PHI requires BAA and security configuration agreed during onboarding.
+- Rate Limiting
+- Healthcare
+- EDI
+limit_count: 0
+description: >-
+  Change Healthcare publishes no numeric rate limit, no burst allowance and no rate-limit response
+  header contract on any property. This file records that verified absence. It replaces a 2026-05-04
+  bulk-sweep scaffold that asserted a 429/401 response-code contract and three "policies" (backoff,
+  sandbox-vs-production throttling, BAA handling) that the company does not publish in those terms —
+  API Evangelist advice credited to the provider, now removed.
+notes: >-
+  The changehealthcare.com API gateway is retired (see lifecycle/change-healthcare-lifecycle.yml), so
+  no live unauthenticated response could be observed carrying rate-limit headers — every path on
+  apis.changehealthcare.com answers 400 invalid_request. The successor Optum developer portal
+  documents API RESPONSE AND TIMEOUT TIMES for the former Change Healthcare Medical Network APIs, but
+  a timeout is not a rate limit: it publishes no requests-per-window ceiling, no X-RateLimit-* or
+  RateLimit-* header set, and no documented status code on exhaustion. Throughput is governed by the
+  customer's clearinghouse contract and onboarding configuration, which is not public.
+response_headers: []
+status_on_exhaustion: null
+evidence:
+- url: https://apis.changehealthcare.com/
+  status: 200
+  note: 'plain-text "ALB Good!" load-balancer health shell; no API, no headers'
+- url: https://apis.changehealthcare.com/openapi.json
+  status: 400
+  note: '{"error":"invalid_request"} — retired gateway answers this on every path'
+- url: https://api.changehealthcare.com/
+  status: 0
+  note: TCP connect timeout on port 443 on both A records
+- url: https://developer.optum.com/eligibilityandclaims/docs/api-urls
+  status: 200
+  note: endpoint reference for the successor surface; documents no rate limit
+limits: []
+policies: []
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com

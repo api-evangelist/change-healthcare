@@ -1,0 +1,91 @@
+generated: '2026-08-14'
+method: searched
+source: https://developer.optum.com/eligibilityandclaims/docs/api-urls
+provider: Change Healthcare
+providerId: change-healthcare
+description: >-
+  Change Healthcare was acquired by UnitedHealth Group and folded into Optum. Its developer
+  surface has been migrated off changehealthcare.com onto Optum infrastructure, and the
+  changehealthcare.com API gateway has been retired. This artifact records that migration with
+  the provider's own published notice, plus the status page that is still reachable on a
+  changehealthcare.com host.
+versioning:
+  scheme: uri-path
+  note: >-
+    Optum's published guidance for the Medical Network APIs (formerly Change Healthcare Medical
+    Network) states that versioning is managed through the URL path. The v2-era
+    "Accept: application/vnd.changehealthcare.medicaleligibility-v2+json" media-type header is
+    explicitly marked DEPRECATED and no longer needs to be sent or incremented.
+  docs: https://developer.optum.com/eligibilityandclaims/docs/api-urls
+deprecation:
+  policy_url: https://developer.optum.com/eligibilityandclaims/docs/api-urls
+  sunset_header: unknown
+  retired_hosts:
+  - host: https://apis.changehealthcare.com
+    status: retired
+    published_notice: >-
+      "Do not use the https://apis.changehealthcare.com as it is an old domain and no longer
+      supported."
+    superseded_by: https://apigw.optum.com/medicalnetwork/
+    observed: >-
+      Host still resolves and terminates TLS but answers HTTP 400 {"error":"invalid_request"} on
+      every path, and 503 {"error":"Service Unavailable","error_description":"Unsupported
+      resource"} on the documented apip/auth/v2/token endpoint.
+  - host: https://sandbox.apis.changehealthcare.com
+    status: retired
+    superseded_by: https://sandbox-apigw.optum.com/medicalnetwork/
+    observed: same 400/503 behaviour as the production host
+  - host: https://developer.changehealthcare.com
+    status: removed
+    observed: NXDOMAIN — the host no longer resolves at all.
+  - host: https://developers.changehealthcare.com
+    status: redirected
+    superseded_by: https://developer.optum.com/
+    observed: CNAME to developer.optum.com; 301s every path to the Optum ReadMe portal.
+  - host: https://www.changehealthcare.com
+    status: redirected
+    superseded_by: https://business.optum.com/en/?src=chc
+    observed: 301 to business.optum.com on the site root.
+  - deprecated_media_type: application/vnd.changehealthcare.medicaleligibility-v2+json
+    status: deprecated
+    published_notice: >-
+      "DEPRECATED — The Accept application/vnd.changehealthcare.medicaleligibility-v2+json header
+      mentioned in v2 need not be sent or incremented; versioning will be managed through the URL
+      path."
+status_page: https://status.changehealthcare.com
+status_page_detail:
+  url: https://status.changehealthcare.com
+  resolves_to: https://solution-status.optum.com/
+  platform: Atlassian Statuspage
+  page_name: Optum Solutions
+  api: https://status.changehealthcare.com/api/v2/summary.json
+  http_status: 200
+  components_observed: 5
+  components:
+  - Absolute AR
+  - MedRx
+  - Pharmacy Data Solutions
+  - Pharmacy Network Solutions
+  - Pharmacy Software Solutions
+  note: >-
+    status.changehealthcare.com is a live CNAME into an Atlassian Statuspage customer host and
+    serves a machine-readable summary.json. The page is branded "Optum Solutions" and its
+    component list covers the pharmacy solutions line, not the Medical Network APIs.
+sla:
+  url: null
+  uptime_target: null
+  note: No public SLA or uptime commitment is published on any changehealthcare.com property.
+deprecated_operations: []
+current_developer_surface:
+  portal: https://developer.optum.com/
+  catalogued_as: all/optum
+  note: >-
+    The Change Healthcare Medical Network API contracts (Eligibility v3, Professional Claims v3,
+    Institutional Claims v1, Claim Status v2, Claims Responses and Reports v2, Attachments
+    submission/status/retrieval, Payer List, Prior Authorization) are published by Optum at
+    developer.optum.com and are already harvested in the Optum profile. They are deliberately NOT
+    duplicated here: every servers[] block in those specs names an *.optum.com host, so per the
+    ownership rule the contracts belong to Optum, not to this brand.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

@@ -1,0 +1,99 @@
+generated: '2026-08-14'
+method: searched
+source: >-
+  https://developer.optum.com/eligibilityandclaims/docs/api-urls and
+  https://www.postman.com/changehealthcare-cdp-dev/change-healthcare-medical-network-apis
+provider: Change Healthcare
+providerId: change-healthcare
+description: >-
+  Standards posture of the Change Healthcare Medical Network API surface, read from the
+  successor developer portal and the company's own public Postman workspace. Nothing here is
+  derived from a spec in this repo, because this repo holds no OpenAPI — the contracts now live
+  with Optum. Entries are recorded only where the provider's own published material names the
+  standard.
+notes: >-
+  No published certification or compliance program page was found on any changehealthcare.com
+  host (/security, /trust and /compliance all 404; trust. and security. subdomains do not answer
+  HTTPS). Consequently NO `Compliance` and NO `TrustCenter` pointer is emitted — HIPAA below is a
+  statutory obligation evident from the transaction set, not a certification the company
+  publishes.
+standards:
+- id: x12-edi-270-271
+  name: X12 EDI 270/271 Health Care Eligibility Benefit Inquiry and Response
+  conforms: true
+  evidence: >-
+    Published as "Medical Network Eligibility v3"; the portal documents JSON-to-EDI mapping and
+    an "X12 EDI 270 Request & 271 Response" reference. Public Postman collection "Medical Network
+    Eligibility v3".
+- id: x12-edi-276-277
+  name: X12 EDI 276/277 Health Care Claim Status Request and Response
+  conforms: true
+  evidence: Public Postman collection "Medical Network Claim Status v2".
+- id: x12-edi-278
+  name: X12 EDI 278 Health Care Services Review (prior authorization / referral)
+  conforms: true
+  evidence: Prior authorization and referral submission documented on the successor portal.
+- id: x12-edi-835
+  name: X12 EDI 835 Health Care Claim Payment/Advice (ERA)
+  conforms: true
+  evidence: Public Postman collections "Medical Network Claims Responses and Reports" v1 and v2.
+- id: x12-edi-837
+  name: X12 EDI 837P/837I Health Care Claim (professional / institutional)
+  conforms: true
+  evidence: >-
+    Public Postman collections "Medical Network Professional Claims v3" and "Medical Network
+    Institutional Claims v1".
+- id: oauth2
+  name: OAuth 2.0 client credentials
+  conforms: true
+  evidence: >-
+    "We use OAuth2 to create a secure connection with our API users, which requires a Bearer
+    token to obtain access." Token endpoint apip/auth/v2/token; one-hour token lifespan.
+- id: hipaa
+  name: HIPAA administrative simplification transaction standards
+  conforms: true
+  evidence: >-
+    The API surface implements the HIPAA-mandated X12 transaction sets above. This is a statutory
+    obligation for a clearinghouse, not a published certification — no HIPAA attestation page was
+    found on a changehealthcare.com host.
+- id: fhir-r4
+  name: HL7 FHIR R4
+  conforms: unknown
+  evidence: >-
+    A "dataaccessandinteroperability" product family (Interoperability Patient Access API -
+    Clinical) is referenced under developers.changehealthcare.com paths, but every such path now
+    301s to developer.optum.com and no FHIR CapabilityStatement was reachable on a
+    changehealthcare.com host.
+- id: rfc9457-problem-details
+  name: RFC 9457 Problem Details for HTTP APIs
+  conforms: false
+  evidence: >-
+    The retired gateway returns a bespoke envelope, not application/problem+json — observed
+    {"error":"invalid_request","error_description":"Invalid request","traceId":"..."} and
+    {"error":"Service Unavailable","error_description":"Unsupported resource"}.
+- id: openapi
+  name: OpenAPI Specification
+  conforms: false
+  evidence: >-
+    No OpenAPI is published on any changehealthcare.com host. The successor portal offers a
+    "Download OpenAPI Spec" control, but those documents are served from developer.optum.com and
+    every servers[] block names an *.optum.com host, so they are catalogued under Optum.
+- id: mcp
+  name: Model Context Protocol
+  conforms: false
+  evidence: tools/list POST returned 400 invalid_request on the gateway hosts; no MCP server published.
+- id: a2a
+  name: A2A Agent Card
+  conforms: false
+  evidence: >-
+    /.well-known/agent-card.json and the legacy /.well-known/agent.json both miss on all four
+    changehealthcare.com hosts.
+- id: graphql
+  name: GraphQL
+  conforms: false
+  evidence: >-
+    Introspection POSTs to /graphql, /api/graphql and /v1/graphql on every host returned 400
+    (gateway) or 409 (website). Change Healthcare publishes no GraphQL API.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

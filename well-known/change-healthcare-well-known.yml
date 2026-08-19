@@ -1,0 +1,112 @@
+generated: '2026-08-14'
+method: probed
+source: live HTTPS probes of every changehealthcare.com host named in apis.yml
+provider: Change Healthcare
+providerId: change-healthcare
+result: none
+notes: >-
+  No /.well-known/ document is served on any changehealthcare.com host. The website host
+  (www.changehealthcare.com) answers 404 with an HTML body on every path; the API gateway hosts
+  (apis. / sandbox.apis.) answer 400 invalid_request on every path because the gateway is
+  decommissioned (see lifecycle/change-healthcare-lifecycle.yml); the developer host
+  (developers.changehealthcare.com) 301s every path to developer.optum.com. NO WellKnown or
+  SecurityTxt pointer is emitted in apis.yml — this file records a verified ABSENCE, not a
+  presence. An A2A agent card was probed at both /.well-known/agent-card.json and the legacy
+  /.well-known/agent.json on all four hosts and missed everywhere, so no a2a/ artifact was
+  written. An MCP tools/list POST and a GraphQL introspection POST were also attempted on the
+  gateway hosts and returned the same 400 invalid_request.
+hosts:
+- host: www.changehealthcare.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /llms.txt
+    status: 200
+    file: ../llms/change-healthcare-llms.txt
+    note: >-
+      The one machine-readable document this company serves. It is an AI-usage POLICY file, not
+      an llms.txt docs index — every usage class is marked disallowed. Saved verbatim under llms/.
+  - path: /robots.txt
+    status: 200
+    note: 'Allow: / for all agents, plus a named optum-ess-search crawler.'
+- host: apis.changehealthcare.com
+  note: decommissioned API gateway; every path answers 400 invalid_request
+  documents:
+  - path: /.well-known/security.txt
+    status: 400
+  - path: /.well-known/openid-configuration
+    status: 400
+  - path: /.well-known/oauth-authorization-server
+    status: 400
+  - path: /.well-known/oauth-protected-resource
+    status: 400
+  - path: /.well-known/api-catalog
+    status: 400
+  - path: /.well-known/ai-plugin.json
+    status: 400
+  - path: /.well-known/agent-card.json
+    status: 400
+  - path: /.well-known/agent.json
+    status: 400
+- host: sandbox.apis.changehealthcare.com
+  note: decommissioned sandbox API gateway; every path answers 400 invalid_request
+  documents:
+  - path: /.well-known/security.txt
+    status: 400
+  - path: /.well-known/openid-configuration
+    status: 400
+  - path: /.well-known/oauth-authorization-server
+    status: 400
+  - path: /.well-known/oauth-protected-resource
+    status: 400
+  - path: /.well-known/api-catalog
+    status: 400
+  - path: /.well-known/ai-plugin.json
+    status: 400
+  - path: /.well-known/agent-card.json
+    status: 400
+  - path: /.well-known/agent.json
+    status: 400
+- host: developers.changehealthcare.com
+  note: >-
+    CNAME to developer.optum.com (ReadMe-hosted). Every path 301s to the same path on
+    developer.optum.com, so nothing is served from a changehealthcare.com origin.
+  documents:
+  - path: /.well-known/security.txt
+    status: 301
+  - path: /.well-known/openid-configuration
+    status: 301
+  - path: /.well-known/oauth-authorization-server
+    status: 301
+  - path: /.well-known/oauth-protected-resource
+    status: 301
+  - path: /.well-known/api-catalog
+    status: 301
+  - path: /.well-known/ai-plugin.json
+    status: 301
+  - path: /.well-known/agent-card.json
+    status: 301
+  - path: /.well-known/agent.json
+    status: 301
+- host: developer.changehealthcare.com
+  note: >-
+    NXDOMAIN — does not resolve. This host was carried as the apis.yml humanURL and has been
+    corrected to developers.changehealthcare.com in this pass.
+  documents: []
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

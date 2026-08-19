@@ -3,66 +3,49 @@ specificationVersion: '0.1'
 schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
 provider: Change Healthcare
 providerId: change-healthcare
+generated: '2026-08-15'
+method: searched
+source: >-
+  live probes of every changehealthcare.com property plus the successor Optum developer portal
 created: '2026-05-04'
-modified: '2026-05-05'
-reconciled: false
+modified: '2026-08-15'
+reconciled: true
 tags:
-  - Healthcare
-  - EDI
-  - Eligibility
-  - Claims
-description: Change Healthcare (now part of Optum / UnitedHealth Group) operates a healthcare data exchange
-  network with APIs for eligibility, claims, payments, prior authorization, and clinical interoperability.
-  API pricing is contracted per-customer (per-transaction EDI rates) and is not published on a public
-  rate card.
-notes: No public price list. Pricing is per-transaction or per-contract; consumers must engage Optum
-  / Change Healthcare sales.
-sources:
-  - https://www.changehealthcare.com
-  - https://www.optum.com/business/solutions/data-analytics.html
-plans:
-  - id: change-healthcare-medical-network
-    name: Medical Network APIs
-    type: usage-based
-    description: Per-transaction APIs for eligibility, claim status, claims submission, ERA, and prior
-      authorization. Priced per transaction under negotiated payer/provider contracts.
-    entries:
-      - label: Per medical network transaction
-        name: medical_network_tx
-        type: metered
-        metric: transaction
-        limit: -1
-        timeFrame: usage
-        geo: US
-        unit: 1
-        price: contract (per-transaction)
-        userMultiplied: false
-    elements:
-      - name: 270/271 Eligibility
-      - name: 276/277 Claim Status
-      - name: 837 Claims Submission
-      - name: 835 ERA
-      - name: 278 Prior Authorization
-  - id: change-healthcare-clinical
-    name: Clinical / Interoperability APIs
-    type: enterprise
-    description: FHIR and clinical data exchange APIs for payers, providers, and life-sciences customers.
-      Pricing negotiated per engagement.
-    entries:
-      - label: Clinical / FHIR access
-        name: clinical_access
-        type: subscription
-        metric: contract
-        limit: -1
-        timeFrame: month
-        geo: US
-        unit: 1
-        price: contract
-        userMultiplied: false
-    elements:
-      - name: FHIR APIs
-      - name: Clinical data exchange
-      - name: Patient access workflows
+- Healthcare
+- EDI
+- Eligibility
+- Claims
+- Pricing
+plan_count: 0
+description: >-
+  Change Healthcare publishes NO plans, tiers, rate card or price list on any property. This file
+  records that verified absence. It replaces a 2026-05-04 bulk-sweep scaffold that had invented two
+  "plans" ("Medical Network APIs" and "Clinical / Interoperability APIs") which the company has
+  never published as purchasable tiers — that content was API Evangelist's own framing being
+  credited to the provider, and it has been removed.
+notes: >-
+  Change Healthcare was acquired by UnitedHealth Group and folded into Optum; www.changehealthcare.com
+  now 301s to business.optum.com. There is no pricing page on the changehealthcare.com domain and no
+  pricing page for the Medical Network APIs on the successor Optum developer portal. Access is
+  obtained by requesting sandbox access and then contracting through Optum sales; the commercial
+  terms (per-transaction clearinghouse rates) are negotiated per customer and never posted. This is
+  an enterprise contact-sales posture, honestly recorded as plan_count 0 rather than dressed as
+  tiers.
+evidence:
+- url: https://www.changehealthcare.com/pricing
+  status: 404
+- url: https://www.changehealthcare.com/
+  status: 301
+  note: redirects to https://business.optum.com/en/?src=chc
+- url: https://developer.optum.com/eligibilityandclaims/docs/api-urls
+  status: 200
+  note: >-
+    Full endpoint reference for the former Change Healthcare Medical Network APIs. Documents URLs,
+    auth and endpoints; publishes no price, tier or quota.
+- url: https://developer.optum.com/eligibilityandclaims/docs/create-a-sandbox-account
+  status: 200
+  note: onboarding is "request sandbox access", not self-serve purchase
+plans: []
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com

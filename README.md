@@ -42,7 +42,20 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Change Healthcare is a major US corporation and Fortune 1000 company. The Change Healthcare API provides programmatic access to its platform services, data, and integrations for enterprise customers and partners.
+Change Healthcare was one of the largest healthcare technology and clearinghouse companies in the United States, moving eligibility, claim, remittance and prior-authorization transactions between providers and payers over X12 EDI. UnitedHealth Group acquired it in October 2022 and folded it into Optum, and the brand has since been retired: `www.changehealthcare.com` redirects to `business.optum.com`, `developers.changehealthcare.com` redirects path-for-path to `developer.optum.com`, and the `apis.changehealthcare.com` API gateway is decommissioned and documented by Optum as "an old domain and no longer supported". The Change Healthcare Medical Network APIs — Eligibility v3, Professional Claims v3, Institutional Claims v1, Claim Status v2, Claims Responses and Reports v2, Attachments, PayerList v1 and Prior Authorization v1 — are still operated and documented, but on Optum infrastructure and under Optum hosts, and are catalogued in [`all/optum`](https://github.com/api-evangelist/optum) rather than duplicated here.
+
+## Not published by Change Healthcare
+
+Verified 2026-08-15 — recorded absences, not gaps in our research:
+
+- **No OpenAPI, AsyncAPI, GraphQL SDL or MCP server** on any `changehealthcare.com` host. Every path on `apis.changehealthcare.com` and `sandbox.apis.changehealthcare.com` answers `400 {"error":"invalid_request"}`; `api.changehealthcare.com` resolves but times out on port 443; `developer.changehealthcare.com` is NXDOMAIN.
+- **No `/.well-known/` document** on any host — see `well-known/change-healthcare-well-known.yml`.
+- **No A2A agent card** at `/.well-known/agent-card.json` or the legacy `/.well-known/agent.json`.
+- **No first-party SDK** on npm, PyPI, RubyGems, crates.io, NuGet, Maven Central or pkg.go.dev. `github.com/changehealthcare` is an empty personal **user** account with 0 public repos, not a company organization.
+- **No published pricing and no published rate limits** — see `plans/` and `rate-limits/`, both recorded at count 0.
+- **No security.txt, vulnerability-disclosure page, bug bounty or trust center.**
+
+The one machine-readable document the company still serves is `https://www.changehealthcare.com/llms.txt` (HTTP 200) — an AI-usage policy marking every usage class disallowed, saved verbatim under `llms/`.
 
 **URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/change-healthcare/refs/heads/main/apis.yml)
 
@@ -50,12 +63,12 @@ Change Healthcare is a major US corporation and Fortune 1000 company. The Change
 
 ## Tags:
 
- - Healthcare, Technology, Analytics
+ - Healthcare, Technology, Analytics, EDI, Claims, Eligibility, Clearinghouse, Revenue Cycle Management, Prior Authorization
 
 ## Timestamps
 
 - **Created:** 2026-04-19
-- **Modified:** 2026-04-19
+- **Modified:** 2026-08-15
 
 ## Maintainers
 

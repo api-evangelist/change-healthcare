@@ -1,0 +1,22 @@
+#changehealthcare
+User-Agent: *
+
+Usage:
+- training: disallowed
+- fine-tuning: disallowed
+- summarization: disallowed
+- embeddings: disallowed
+- commercial-use: disallowed
+- caching: disallowed
+- analytics: disallowed
+- derivative-works: disallowed
+- personalization: disallowed
+
+Policy:
+All content must not be used for machine learning or AI purposes.
+
+Legal:
+Unauthorized use of this content may violate our terms of service.
+
+Contact:
+no-reply@optum.com
