@@ -39,7 +39,7 @@ description: >-
   operated and documented, but on Optum infrastructure and under Optum hosts.
 created: '2026-04-19'
 modified: '2026-08-15'
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 apis:
 - aid: change-healthcare:change-healthcare-api
   name: Change Healthcare Medical Network API
