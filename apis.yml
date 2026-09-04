@@ -24,6 +24,7 @@ accessModel:
   source:
   - plans
   - https://developer.optum.com/eligibilityandclaims/docs/create-a-sandbox-account
+  - {url: 'https://www.changehealthcare.com', status: 301, note: 'declared website redirects to https://business.optum.com/en/?src=chc — a different registrable domain (changehealthcare.com -> optum.com), possible rename or acquisition (probed 2026-09-03, roadmap#169)'}
   generated: '2026-08-15'
   method: searched
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/change-healthcare.png
