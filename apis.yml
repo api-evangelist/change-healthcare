@@ -103,6 +103,12 @@ apis:
   - url: conformance/change-healthcare-conformance.yml
     type: Conformance
 common:
+- type: Plans
+  url: plans/change-healthcare-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/change-healthcare-rate-limits.yml
+- type: FinOps
+  url: finops/change-healthcare-finops.yml
 - type: Website
   url: https://www.changehealthcare.com
 - type: DeveloperPortal
