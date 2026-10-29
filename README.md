@@ -1,4 +1,4 @@
-# Change Healthcare (change-healthcare)
+# Change Healthcare
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,36 +64,104 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Change Healthcare was one of the largest healthcare technology and clearinghouse companies in the United States, moving eligibility, claim, remittance and prior-authorization transactions between providers and payers over X12 EDI. UnitedHealth Group acquired it in October 2022 and folded it into Optum, and the brand has since been retired: `www.changehealthcare.com` redirects to `business.optum.com`, `developers.changehealthcare.com` redirects path-for-path to `developer.optum.com`, and the `apis.changehealthcare.com` API gateway is decommissioned and documented by Optum as "an old domain and no longer supported". The Change Healthcare Medical Network APIs — Eligibility v3, Professional Claims v3, Institutional Claims v1, Claim Status v2, Claims Responses and Reports v2, Attachments, PayerList v1 and Prior Authorization v1 — are still operated and documented, but on Optum infrastructure and under Optum hosts, and are catalogued in [`all/optum`](https://github.com/api-evangelist/optum) rather than duplicated here.
+Change Healthcare was one of the largest healthcare technology and clearinghouse companies in the United States, moving eligibility, claim, remittance and prior-authorization transactions between providers and payers over X12 EDI. UnitedHealth Group acquired it in October 2022 and folded it into Optum, and the brand has since been retired: www.changehealthcare.com redirects to business.optum.com, developers.changehealthcare.com redirects path-for-path to developer.optum.com, and the apis.changehealthcare.com API gateway is decommissioned and documented by Optum as "an old domain and no longer supported". The Change Healthcare Medical Network APIs — Eligibility v3, Professional Claims v3, Institutional Claims v1, Claim Status v2, Claims Responses and Reports v2, Attachments, PayerList v1 and Prior Authorization v1 — are still operated and documented, but on Optum infrastructure and under Optum hosts.
 
-## Not published by Change Healthcare
+**Areas:** Healthcare · Technology · Analytics · EDI · Claims · Eligibility · Clearinghouse · Revenue Cycle Management · Prior Authorization
 
-Verified 2026-08-15 — recorded absences, not gaps in our research:
+## Change Healthcare on APIs.io
 
-- **No OpenAPI, AsyncAPI, GraphQL SDL or MCP server** on any `changehealthcare.com` host. Every path on `apis.changehealthcare.com` and `sandbox.apis.changehealthcare.com` answers `400 {"error":"invalid_request"}`; `api.changehealthcare.com` resolves but times out on port 443; `developer.changehealthcare.com` is NXDOMAIN.
-- **No `/.well-known/` document** on any host — see `well-known/change-healthcare-well-known.yml`.
-- **No A2A agent card** at `/.well-known/agent-card.json` or the legacy `/.well-known/agent.json`.
-- **No first-party SDK** on npm, PyPI, RubyGems, crates.io, NuGet, Maven Central or pkg.go.dev. `github.com/changehealthcare` is an empty personal **user** account with 0 public repos, not a company organization.
-- **No published pricing and no published rate limits** — see `plans/` and `rate-limits/`, both recorded at count 0.
-- **No security.txt, vulnerability-disclosure page, bug bounty or trust center.**
+Everything profiled for Change Healthcare is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/change-healthcare/](https://apis.io/providers/change-healthcare/)** — or go straight to one of the APIs or properties below.
 
-The one machine-readable document the company still serves is `https://www.changehealthcare.com/llms.txt` (HTTP 200) — an AI-usage policy marking every usage class disallowed, saved verbatim under `llms/`.
+### APIs (1)
 
-**URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/change-healthcare/refs/heads/main/apis.yml)
+- [Change Healthcare Medical Network API](https://apis.io/apis/change-healthcare/change-healthcare-api/) — JSON-over-REST front end to the HIPAA X12 EDI transaction set — 270/271 eligibility, 276/277 claim status, 837P/837I claim submission and validation,…
 
-**Run:** [Capabilities Using Naftiko](https://github.com/naftiko/fleet?utm_source=api-evangelist&utm_medium=readme&utm_campaign=company-api-evangelist&utm_content=repo)
+### Published properties
 
-## Tags:
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
- - Healthcare, Technology, Analytics, EDI, Claims, Eligibility, Clearinghouse, Revenue Cycle Management, Prior Authorization
+#### Security (1)
 
-## Timestamps
+Authentication, trust centre, and vulnerability disclosure.
 
-- **Created:** 2026-04-19
-- **Modified:** 2026-08-15
+- [Change Healthcare Domain Security](https://apis.io/security/change-healthcare/change-healthcare-domain-security/)
 
-## Maintainers
+#### Plans and pricing (1)
 
-**FN:** Kin Lane
+Published plans, tiers and prices.
 
-**Email:** kin@apievangelist.com
+- [Change Healthcare Plans Pricing](https://apis.io/plans/change-healthcare/change-healthcare-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Change Healthcare Rate Limits](https://apis.io/rate-limits/change-healthcare/change-healthcare-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Change Healthcare Finops](https://apis.io/finops/change-healthcare/change-healthcare-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.changehealthcare.com)
+- [Terms of service](https://www.optum.com/en/terms-of-use.html)
+- [Privacy policy](https://www.optum.com/en/privacy-policy.html)
+- [Status](https://status.changehealthcare.com)
+
+## API Evangelist rating
+
+**Kin Score 28.1** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 0.0 |
+| Contract governance | 18.2 |
+| Operational transparency | 31.6 |
+| Developer ergonomics | 38.1 |
+| Access clarity | 34.2 |
+
+**Agent readiness 2.5** — human-only
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | — |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 16.7** — Insurance
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/change-healthcare/](https://apis.io/providers/change-healthcare/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Change Healthcare: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/change-healthcare/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
